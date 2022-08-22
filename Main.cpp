@@ -10,7 +10,7 @@ void header(std::ofstream& File, const std::string &name_body, const double &dt,
 
 void read_data(const std::string &File_address, const int &n, std::string &name, double Orbital_Parameters[], double & mass, double &period);
 
-int main()
+int main(int argc, char **argv)
 {
     std::cout.precision(8);
     std::string name1 = "Sun";  // Name central body.
@@ -20,12 +20,12 @@ int main()
     std::string name[3];    // Array of names
     name[0] = name1;
 
-    int bodies[2] = {1, 3}; // 2nd and 3rd body.
+    int bodies[2] = {atoi(argv[1]), atoi(argv[2])}; // 2nd and 3rd body.
 
     const double G = 4 * pow(M_PI, 2);  // Universal gravitational constant.
-    int k = 100;    // Number of orbital periods of outer body.
-    int jump = 100; // Stepsize of writing.
-    int n = 10000;  // Iterations in a orbital period of outer body.
+    int k = atoi(argv[3]);    // Number of orbital periods of outer body.
+    int jump = atoi(argv[4]); // Stepsize of writing.
+    int n = atoi(argv[5]);  // Iterations in a orbital period of outer body.
     double T, dt; // Orbital period of outer body and time's stepsize, respectively.
     double mass[3], period[3]; // Array of masses and orbital periods, respectively.
     mass[0]=1.; period[0]=0.;
@@ -73,7 +73,7 @@ int main()
             CCBody3 << std::endl;
         }
         for (int ee=0; ee<n; ee+=jump){
-            rel_vec(q[ee][0], q[ee][1],Cartesian_vector2, 6);
+            rel_vec(q[ee][0], q[ee][1], Cartesian_vector2, 6);
             rel_vec(q[ee][0], q[ee][2], Cartesian_vector3, 6);
             coords_to_op(mu, Cartesian_vector2, Orbital_Parameters2);
             coords_to_op(mu, Cartesian_vector3, Orbital_Parameters3);

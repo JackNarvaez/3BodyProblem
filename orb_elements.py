@@ -63,7 +63,7 @@ def Plot_OrbElem(t, Orbital_elements, Name='test particle', Color='cyan'):
     plt.show()
 
 # Body's name
-Names = ['Sun', 'Jupiter','(1373)Cincinnati'] # Remember to update the 3rd body!!!
+Names = ['Sun', 'Jupiter','(4690)Strasbourg'] # Remember to update the 3rd body!!!
 #Body's masses [M_sun]
 Masses = [1., 9.54792e-04, 1.0e-16]
 
