@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 plt.style.use('dark_background')
 
+from sys import argv
 from numpy import loadtxt, linspace
 
 def Plot_OrbElem(t, Orbital_elements, Name='test particle', Color='cyan'):
@@ -63,9 +64,9 @@ def Plot_OrbElem(t, Orbital_elements, Name='test particle', Color='cyan'):
     plt.show()
 
 # Body's name
-Names = ['Sun', 'Jupiter','(4690)Strasbourg'] # Remember to update the 3rd body!!!
-#Body's masses [M_sun]
-Masses = [1., 9.54792e-04, 1.0e-16]
+skip = int(argv[1])-1
+Third_name = str(loadtxt('Data.asc', skiprows=14+skip, max_rows=1,  usecols=[0], dtype='str')) # Name of third body
+Names = ['Sun', 'Jupiter', Third_name] # Remember to update the 3rd body!!!
 
 # Path to the files
 path_OP_B1 = './Files/OP_' + Names[1] + '.txt'
