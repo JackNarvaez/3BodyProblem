@@ -3,7 +3,7 @@
 Authors: Narvaéz J.
 
 <p style='text-align: justify;'> 
-Simulation of a system of 3 bodies interacting with each other gravitationally. It focuses on observing the time evolution in Classical Orbital Elements (COEs) in an attempt to detect the "Kozai-Lidov" effect. It takes by default the Sun and Jupiter as the 2 massive bodies, and the 3rd body is a small solar system object.
+Simulation of a system of 3 bodies interacting with each other gravitationally. It focuses on observing the time evolution in Classical Orbital Elements (COEs) in an attempt to detect the Kozai-Lidov effect. It takes by default the Sun and Jupiter as the 2 massive bodies, and the 3rd body is a small solar system object.
 </p>
 
 The evolution step is performed using the `PEFRL` integrator, a 4th-order symplectic algorithm [[3]](#PEFRL).
