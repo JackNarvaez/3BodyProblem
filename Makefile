@@ -11,11 +11,13 @@ Main: Main.cpp Integrator.cpp Integrator.h conversion.h conversion.h
 	./Evolution.x ${Body2} ${Body3} ${k} ${jump} ${n};\
 
 COEs_Evolve: orb_elements.py
-	python3 orb_elements.py ${Body3}
+	python3 $< ${Body3}
 
 Phase_Space: Phase_space.py
-	python3 Phase_space.py ${Body3}
+	python3 $< ${Body3}
 
+Energy: EnergyPlot.py
+	python3 $< ${Body3}
 clean:
 	rm -f *.x *.txt *.png *.out *.gif
 	rm -f ./Files/* *.txt
