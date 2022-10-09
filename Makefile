@@ -23,6 +23,16 @@ Energy: Energy.cpp Integrator.cpp Integrator.h
 Plot_Energy: EnergyPlot.py
 	python3 $< ${Body2} ${Body3}
 
+Profiling_gprof: Main.cpp Integrator.cpp Integrator.h conversion.h conversion.h
+	g++ -std=c++17 -g -pg -Wall  $< Integrator.cpp conversion.cpp -o Evolution.x;\
+	./Evolution.x ${Body2} ${Body3} 1000 10 1000;\
+	gprof ./Evolution.x gmon.out > report.txt;\
+
+#Profiling_cache: Main.cpp Integrator.cpp Integrator.h conversion.h conversion.h
+#	g++ -std=c++17 -g -pg -Wall  $< Integrator.cpp conversion.cpp -o Evolution.x;\
+#	valgrind --tool=cachegrind ./Evolution.x  ${Body2} ${Body3} 100 10 100;\
+#	cg_annotate --auto=yes cachegrind.out.<pid> > report2.txt;\
+
 clean:
 	rm -f *.x *.txt *.png *.out *.gif
 	rm -f ./Files/* *.txt
