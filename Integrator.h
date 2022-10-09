@@ -7,4 +7,6 @@ void PEFRL(const double q0[][6], const double mass[], const int &n, const double
 
 void rel_vec(const double Center_Body[], const double Outer_Body[], double Relative_Position[], const int &n);
 
+double Energy(double q[][6], double mass[]);
+
 #endif

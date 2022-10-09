@@ -138,3 +138,36 @@ void rel_vec(const double Center_Body[], const double Outer_Body[], double Relat
         Relative_Position[i]=Outer_Body[i]-Center_Body[i];
     }    
 }
+
+double Energy(double q[][6], double mass[]){
+    /*---------------------------------------------------------------------------------------------
+    Energy:
+    Calculate the total energy of 3 particles interacting gravitationally.
+    -----------------------------------------------------------------------------------------------
+    Arguments:
+        q   :   Array with the position and velocity of the particles with the format
+                q[i] = [xi, yi, zi, vxi, vyi, vzi]
+        mass:   Array with the masses of the particles.
+                m = [m1, m2, m3]
+    -----------------------------------------------------------------------------------------------
+    Returns:
+    E = Total energy of the system
+    ---------------------------------------------------------------------------------------------*/
+    double speed2[3];
+    for (int ii=0; ii<3; ii++){
+        speed2[ii] = pow(q[ii][3],2)+pow(q[ii][4],2)+pow(q[ii][5],2);
+    }
+    double rel_position[3][3], r[3];
+    rel_vec(q[1],q[0],rel_position[0], 3);
+    rel_vec(q[2],q[0],rel_position[1], 3);
+    rel_vec(q[2],q[1],rel_position[2], 3);
+    for (int ii=0; ii < 3; ii++){
+        r[ii] = sqrt(pow(rel_position[ii][0],2)+pow(rel_position[ii][1],2)+pow(rel_position[ii][2],2));
+    }
+    double U[3] = {mass[0]*mass[1]/r[0], mass[0]*mass[2]/r[1], mass[1]*mass[2]/r[2]};
+    double E=0;
+    for (int ii=0; ii < 3; ii++){
+        E+=0.5*speed2[ii]*mass[ii]-2*G*U[ii];
+    }
+    return E;
+}

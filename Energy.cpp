@@ -5,41 +5,6 @@
 #include <cmath>
 #include "Integrator.h"
 
-const double G = 4*pow(M_PI,2); // Universal gravitational constant.
-
-double Energy(double q[][6], double mass[]){
-    /*---------------------------------------------------------------------------------------------
-    Energy:
-    Calculate the total energy of 3 particles interacting gravitationally.
-    -----------------------------------------------------------------------------------------------
-    Arguments:
-        q   :   Array with the position and velocity of the particles with the format
-                q[i] = [xi, yi, zi, vxi, vyi, vzi]
-        mass:   Array with the masses of the particles.
-                m = [m1, m2, m3]
-    -----------------------------------------------------------------------------------------------
-    Returns:
-    E = Total energy of the system
-    ---------------------------------------------------------------------------------------------*/
-    double speed2[3];
-    for (int ii=0; ii<3; ii++){
-        speed2[ii] = pow(q[ii][3],2)+pow(q[ii][4],2)+pow(q[ii][5],2);
-    }
-    double rel_position[3][3], r[3];
-    rel_vec(q[1],q[0],rel_position[0], 3);
-    rel_vec(q[2],q[0],rel_position[1], 3);
-    rel_vec(q[2],q[1],rel_position[2], 3);
-    for (int ii=0; ii < 3; ii++){
-        r[ii] = sqrt(pow(rel_position[ii][0],2)+pow(rel_position[ii][1],2)+pow(rel_position[ii][2],2));
-    }
-    double U[3] = {mass[0]*mass[1]/r[0], mass[0]*mass[2]/r[1], mass[1]*mass[2]/r[2]};
-    double E=0;
-    for (int ii=0; ii < 3; ii++){
-        E+=0.5*speed2[ii]*mass[ii]-2*G*U[ii];
-    }
-    return E;
-}
-
 void header(std::ofstream& File, const std::string &name_body, const int &n, const int &k, const int &jump, std::string coord){
     /*---------------------------------------------------------------------------------------------
     header:
@@ -63,7 +28,7 @@ void header(std::ofstream& File, const std::string &name_body, const int &n, con
     File << n << " " << k << " " << jump << std::endl;
 }
 
-void read_data(const std::string &File_address, double q[][3][6], const int bod, const int it){
+void read_evol(const std::string &File_address, double q[][3][6], const int bod, const int it){
     /*---------------------------------------------------------------------------------------------
     read_data:
     Read information about the evolution of three-body system.
@@ -94,11 +59,56 @@ void read_data(const std::string &File_address, double q[][3][6], const int bod,
     }
 }
 
+void read_data(const std::string &File_address, const int &n, std::string &name, double & mass){
+    /*---------------------------------------------------------------------------------------------
+    read_data:
+    Read information about the three-body system.
+    -----------------------------------------------------------------------------------------------
+    Arguments:
+        File_address    :   File address from which the data is read.
+        n               :   Number of rows in File_address
+        name            :   Array to store the body's name.
+        Orbital_Parameters: Array to store orbital elements.
+        mass            :   mass of the body.
+        period          :   Orbital period.
+    -----------------------------------------------------------------------------------------------
+    Fill the values inputs as:
+        Name = Body's name.
+        Orbital_Parameters[] = {a, ecc, i, omega, Omega, epoch, t}
+        mass = Mass.
+        period = Orbital period.
+    ---------------------------------------------------------------------------------------------*/
+    std::ifstream File;
+    File.open (File_address, std::ifstream::in);    // Open file
+    std::string line;
+    int i = 1;  //Line counter
+	while (!File.eof()){
+	std::getline(File,line);
+    // Omit empty lines and comments
+	if (line.length() == 0 || line[0] == '#'){
+		continue;
+    }else{
+        if(i==n){ // Find line of body in data file.
+        std::istringstream iss(line);   // Separate line in columns
+        std::string data;
+        iss >> name;    // Fill name
+        for(int ii=0; ii < 7; ii++){
+            iss >> data;
+        }
+        iss >> data;
+        mass = atof(data.c_str());  // Fill mass
+        break;
+        }
+        i++;
+    }
+    }
+}
 int main(int argc, char **argv)
 {
     std::cout.precision(8);
-    std::string name1 = "Sun";  // Name central body.
-    std::string name[3] = {"Sun", "Jupiter", "(3040)Kozai"};  // Array of names
+    std::string name[3];  // Array of names
+    name[0] = "Sun";  // Name central body.
+    std::string Data = "Data.asc";  // Data file
 
     int bodies[2] = {atoi(argv[1]), atoi(argv[2])}; // 2nd and 3rd body.
 
@@ -107,8 +117,8 @@ int main(int argc, char **argv)
     int n = atoi(argv[5]);  // Iterations in a orbital period of outer body.
     double mass[3];// Array of masses.
     mass[0]=1.;
-    mass[1]=9.54792e-04;
-    mass[2]=1.0e-16;
+    read_data(Data,bodies[0], name[1], mass[1]);  // Fill data to body 2
+    read_data(Data,bodies[1], name[2], mass[2]);  // Fill data to body 
     double q[n][3][6];      // Array of system's evolution.
 
     std::string Data1 = "./Files/CC_"+name[0]+".txt";  // Data Evolution B1
@@ -116,9 +126,9 @@ int main(int argc, char **argv)
     std::string Data3 = "./Files/CC_"+name[2]+".txt";  // Data Evolution B3
     double it = k*n/(100*jump);
 
-    read_data(Data1,q, 0, it);  // Fill B1 data
-    read_data(Data2,q, 1, it);  // Fill B2 data
-    read_data(Data3,q, 2, it);  // Fill B3 data
+    read_evol(Data1,q, 0, it);  // Fill B1 data
+    read_evol(Data2,q, 1, it);  // Fill B2 data
+    read_evol(Data3,q, 2, it);  // Fill B3 data
 
     std::ofstream E;
     header(E, name[2], n, k, jump, "Energy");

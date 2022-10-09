@@ -24,22 +24,21 @@ def Plot_Energy(E, Names='test particle', Color='cyan'):
     axs.plot(E, color=Color)
     axs.set_ylabel('E')
     axs.set_xlabel('it')
+    axs.set_xlim(0, len(E))
 
     plt.show()
 
 # Body's name
-skip = int(argv[1])-1
-Third_name = str(loadtxt('Data.asc', skiprows=14+skip, max_rows=1,  usecols=[0], dtype='str')) # Name of third body
-Names = ['Sun', 'Jupiter', Third_name] # Remember to update the 3rd body!!!
+skip2 = int(argv[1])-1
+skip3 = int(argv[2])-1
+Second_name = str(loadtxt('Data.asc', skiprows=14+skip2, max_rows=1,  usecols=[0], dtype='str')) # Name of third body
+Third_name = str(loadtxt('Data.asc', skiprows=14+skip3, max_rows=1,  usecols=[0], dtype='str')) # Name of third body
+Names = ['Sun', Second_name, Third_name] # Remember to update the 3rd body!!!
 
 # Path to the files
 path_E = './Files/Energy_' + Third_name + '.txt'
-# dt: Discrete time step.
-# n: Number of time-iterations in one outer period.
-# k: Number of outer periods.
-# jump: Jump size to store data in files
+
 E =  loadtxt(path_E, skiprows=3, unpack=True)
 
-# Array to store time information
-# Plots of orbital elements.
+# Plots of Energy.
 Plot_Energy(E, Names)

@@ -16,8 +16,13 @@ COEs_Evolve: orb_elements.py
 Phase_Space: Phase_space.py
 	python3 $< ${Body3}
 
-Energy: EnergyPlot.py
-	python3 $< ${Body3}
+Energy: Energy.cpp Integrator.cpp Integrator.h
+	g++ -std=c++17 $< Integrator.cpp Integrator.h -o Energy.x;\
+	./Energy.x ${Body2} ${Body3} ${k} ${jump} ${n};\
+
+Plot_Energy: EnergyPlot.py
+	python3 $< ${Body2} ${Body3}
+
 clean:
 	rm -f *.x *.txt *.png *.out *.gif
 	rm -f ./Files/* *.txt
