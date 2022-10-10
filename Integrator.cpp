@@ -23,19 +23,19 @@ void Acceleration(const double q0[][3], const double mass[], double a[][3]){
     Fill the values of acceleration vector, a, to:
         a[i] = [ax_i, ay_i, az_i] for i=0,1,2
     ---------------------------------------------------------------------------------------------*/
-    double Deltaxyz[3][3], r[3];
+    double Deltaxyz[9], r[3];
     for (int jj = 0; jj < 3; jj++){
         for (int ii = 1; ii < 3; ii++)
-            Deltaxyz[ii-1][jj]=q0[0][jj]-q0[ii][jj];
-        Deltaxyz[2][jj] = q0[1][jj]-q0[2][jj];
+            Deltaxyz[ii*3+jj-3]=q0[0][jj]-q0[ii][jj];
+        Deltaxyz[6+jj] = q0[1][jj]-q0[2][jj];
     }
     for (int ii=0; ii < 3; ii++){
-        r[ii]= sqrt(pow(Deltaxyz[ii][0],2)+pow(Deltaxyz[ii][1],2)+pow(Deltaxyz[ii][2],2));
+        r[ii]= sqrt(pow(Deltaxyz[ii*3],2)+pow(Deltaxyz[ii*3+1],2)+pow(Deltaxyz[ii*3+2],2));
     }
     for (int jj = 0; jj < 3; jj++){
-        a[0][jj] = -G*(Deltaxyz[0][jj]*mass[1]/pow(r[0],3)+Deltaxyz[1][jj] * mass[2]/pow(r[1],3));
-        a[1][jj] = G*(Deltaxyz[0][jj]*mass[0]/pow(r[0],3)-Deltaxyz[2][jj] * mass[2]/pow(r[2],3));
-        a[2][jj] = G*(Deltaxyz[1][jj]*mass[0]/pow(r[1],3)+Deltaxyz[2][jj] * mass[1]/pow(r[2],3));
+        a[0][jj] = -G*(Deltaxyz[jj]*mass[1]/pow(r[0],3)+Deltaxyz[3+jj] * mass[2]/pow(r[1],3));
+        a[1][jj] = G*(Deltaxyz[jj]*mass[0]/pow(r[0],3)-Deltaxyz[6+jj] * mass[2]/pow(r[2],3));
+        a[2][jj] = G*(Deltaxyz[3+jj]*mass[0]/pow(r[1],3)+Deltaxyz[6+jj] * mass[1]/pow(r[2],3));
     }
 }
 

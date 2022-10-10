@@ -3,6 +3,7 @@
 #include <sstream>  // std::istringstream
 #include <stdlib.h>     // atof
 #include <cmath>
+#include <chrono>
 #include "conversion.h"
 #include "Integrator.h"
 
@@ -12,6 +13,7 @@ void read_data(const std::string &File_address, const int &n, std::string &name,
 
 int main(int argc, char **argv)
 {
+    auto start = std::chrono::steady_clock::now();
     std::cout.precision(8);
     std::string name1 = "Sun";  // Name central body.
     double body1[6] = {0., 0., 0., 0., 0., 0.}; // Cartesian vector of Central body.
@@ -96,6 +98,10 @@ int main(int argc, char **argv)
     CCBody3.close();
     OPBody2.close();
     OPBody3.close();
+    auto end = std::chrono::steady_clock::now();
+    std::cout << "Elapsed time in ms: "
+        << std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count()
+        << "\n";
     return 0;
 }
 
