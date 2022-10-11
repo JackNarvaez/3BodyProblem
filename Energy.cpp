@@ -1,3 +1,9 @@
+/*-------------------------------------------------------------------------------------------------
+Reads information about the evolution of the 3-Bodies system and calculates the energy over time.
+
+Author: Narvaez J.
+-------------------------------------------------------------------------------------------------*/
+
 #include <iostream>
 #include <fstream>  // std::ifstream; // std::ofstream
 #include <sstream>  // std::istringstream
@@ -7,21 +13,20 @@
 
 void header(std::ofstream& File, const std::string &name_body, const int &n, const int &k, const int &jump, std::string coord){
     /*---------------------------------------------------------------------------------------------
-    header:
-    Write the header of file to store results, as follows:
+    Writes the header in file that stores results, as follows:
 
     name_body
     n k jump
 
-    The name of file is: coord_name_body.txt
+    The name of file is: <coord>_<name_body>.txt
     -----------------------------------------------------------------------------------------------
     Arguments:
-        File    :   File to write header.
-        name_body:  Name of the body.
-        n       :   Number of time-iterations in one outer period.
-        k       :   Number of outer periods.
-        jump    :   Jump size to store data in files.
-        coord   :   OP (Orbital parameters) or CC (Cartesian Coordinates)
+    File    :   File where the header is written.
+    name_body:  Name of the body.
+    n       :   Number of time-iterations in one outer period.
+    k       :   Number of outer periods.
+    jump    :   Jump size to store data in files.
+    coord   :   Keyword.
     ---------------------------------------------------------------------------------------------*/
     File.open("./Files/"+coord+"_"+name_body+".txt");
     File << name_body << std::endl;
@@ -30,16 +35,16 @@ void header(std::ofstream& File, const std::string &name_body, const int &n, con
 
 void read_evol(const std::string &File_address, double q[][3][6], const int bod, const int it){
     /*---------------------------------------------------------------------------------------------
-    read_data:
-    Read information about the evolution of three-body system.
+    Reads information about the evolution of three-body system.
     -----------------------------------------------------------------------------------------------
     Arguments:
-        File_address    :   File address from which the data is read.
-        n               :   Number of rows in File_address
-        q               :   Array to store the evolution of a Body.
+    File_address:   File address from which the data is read.
+    q   :   Array that stores the evolution of a Body.
+    bod :   Number of body.
+    it  :   Iterations.
     -----------------------------------------------------------------------------------------------
-    Fill the values inputs as:
-        q[i][6] = [xi, yi, zi, vxi, vyi, vzi] for i=1, ..., n
+    Fills the value of inputs as:
+        q[i][n] = [xn_i, yn_i, zn_i, vxn_i, vyn_i, vzn_i] for i=1, ..., it. and n=1,2,3.
     ---------------------------------------------------------------------------------------------*/
     std::ifstream File;
     File.open (File_address, std::ifstream::in);    // Open file
@@ -61,22 +66,17 @@ void read_evol(const std::string &File_address, double q[][3][6], const int bod,
 
 void read_data(const std::string &File_address, const int &n, std::string &name, double & mass){
     /*---------------------------------------------------------------------------------------------
-    read_data:
-    Read information about the three-body system.
+    Reads information about the three-body system.
     -----------------------------------------------------------------------------------------------
     Arguments:
-        File_address    :   File address from which the data is read.
-        n               :   Number of rows in File_address
-        name            :   Array to store the body's name.
-        Orbital_Parameters: Array to store orbital elements.
-        mass            :   mass of the body.
-        period          :   Orbital period.
+    File_address:   File address from which the data is read.
+    n           :   Number of rows in File_address
+    name        :   Array that stores the body's name.
+    mass        :   mass of the body.
     -----------------------------------------------------------------------------------------------
-    Fill the values inputs as:
+    Fills the value of inputs as:
         Name = Body's name.
-        Orbital_Parameters[] = {a, ecc, i, omega, Omega, epoch, t}
         mass = Mass.
-        period = Orbital period.
     ---------------------------------------------------------------------------------------------*/
     std::ifstream File;
     File.open (File_address, std::ifstream::in);    // Open file
@@ -103,6 +103,7 @@ void read_data(const std::string &File_address, const int &n, std::string &name,
     }
     }
 }
+
 int main(int argc, char **argv)
 {
     std::cout.precision(8);

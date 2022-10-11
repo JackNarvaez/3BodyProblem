@@ -1,3 +1,13 @@
+/*-------------------------------------------------------------------------------------------------
+Simulation of a system of 3-bodies interacting with each other gravitationally. 
+It finds the time evolution of classical orbital elements (COEs) of the two outer bodies.
+It takes by default the Sun and Jupiter as the two massive objects, while the third is a small solar
+system object.
+The evolution step is performed using the PEFRL integrator, a 4th-order symplectic algorithm.
+
+Author: Narvaez J.
+-------------------------------------------------------------------------------------------------*/
+
 #include <iostream>
 #include <fstream>  // std::ifstream; // std::ofstream
 #include <sstream>  // std::istringstream
@@ -51,11 +61,8 @@ int main(int argc, char **argv)
         q[0][2][ll] = Cartesian_vector3[ll];
     }
 
-    std::ofstream CCBody1;
-    std::ofstream CCBody2;
-    std::ofstream CCBody3;
-    std::ofstream OPBody2;
-    std::ofstream OPBody3;
+    std::ofstream CCBody1, CCBody2, CCBody3, OPBody2, OPBody3;
+
     header(CCBody1, name[0], dt, n, k, jump, "CC");
     header(CCBody2, name[1], dt, n, k, jump, "CC");
     header(CCBody3, name[2], dt, n, k, jump, "CC");
@@ -107,22 +114,21 @@ int main(int argc, char **argv)
 
 void header(std::ofstream& File, const std::string &name_body, const double &dt, const int &n, const int &k, const int &jump, std::string coord){
     /*---------------------------------------------------------------------------------------------
-    header:
-    Write the header of file to store results, as follows:
+    Writes the header in file that stores results, as follows:
 
     name_body
     dt n k jump
 
-    The name of file is: coord_name_body.txt
+    The name of file is: <coord>_<name_body>.txt
     -----------------------------------------------------------------------------------------------
     Arguments:
-        File    :   File to write header.
-        name_body:  Name of the body.
-        dt      :   Discrete time step.
-        n       :   Number of time-iterations in one outer period.
-        k       :   Number of outer periods.
-        jump    :   Jump size to store data in files.
-        coord   :   OP (Orbital parameters) or CC (Cartesian Coordinates)
+    File    :   File where the header is written.
+    name_body:  Name of the body.
+    dt      :   Discrete time step.
+    n       :   Number of time-iterations in one outer period.
+    k       :   Number of outer periods.
+    jump    :   Jump size to store data in files.
+    coord   :   OP (Orbital parameters) or CC (Cartesian Coordinates)
     ---------------------------------------------------------------------------------------------*/
     File.open("./Files/"+coord+"_"+name_body+".txt");
     File << name_body << std::endl;
@@ -131,18 +137,17 @@ void header(std::ofstream& File, const std::string &name_body, const double &dt,
 
 void read_data(const std::string &File_address, const int &n, std::string &name, double Orbital_Parameters[], double & mass, double &period){
     /*---------------------------------------------------------------------------------------------
-    read_data:
-    Read information about the three-body system.
+    Reads information about the three-body system.
     -----------------------------------------------------------------------------------------------
     Arguments:
-        File_address    :   File address from which the data is read.
-        n               :   Number of rows in File_address
-        name            :   Array to store the body's name.
-        Orbital_Parameters: Array to store orbital elements.
-        mass            :   mass of the body.
-        period          :   Orbital period.
+    File_address    :   File address from which the data is read.
+    n               :   Number of rows in File_address
+    name            :   Array that stores the body's name.
+    Orbital_Parameters: Array that stores orbital elements.
+    mass            :   mass of the body.
+    period          :   Orbital period.
     -----------------------------------------------------------------------------------------------
-    Fill the values inputs as:
+    Fills the value of inputs as:
         Name = Body's name.
         Orbital_Parameters[] = {a, ecc, i, omega, Omega, epoch, t}
         mass = Mass.
