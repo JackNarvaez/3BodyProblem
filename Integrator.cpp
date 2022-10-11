@@ -1,6 +1,6 @@
-// Evolution of a three-body system under gravitational interaction by PEFRL integrator.
+// Simulation of a system of three bodies interacting with each other gravitationally.
+// Evolution is performed by PEFRL integrator.
 
-#include <iostream>
 #include <cmath>
 #include "Integrator.h"
 
@@ -8,8 +8,7 @@ const double G = 4*pow(M_PI,2); // Universal gravitational constant.
 
 void Acceleration(const double q0[][3], const double mass[], double a[][3]){
     /*---------------------------------------------------------------------------------------------
-    Acceleration:
-    Calculate the acceleration due to gravitation for each body in the 3 body system.
+    Calculates the gravitational acceleration for each body in the 3 body system.
     -----------------------------------------------------------------------------------------------
     Arguments:
     q0: Array with the initial condition data:
@@ -20,7 +19,7 @@ void Acceleration(const double q0[][3], const double mass[], double a[][3]){
     mass: masses of the particles
         mass = [m1, m2, m3]
     -----------------------------------------------------------------------------------------------
-    Fill the values of acceleration vector, a, to:
+    Fills the values of acceleration vector, a, to:
         a[i] = [ax_i, ay_i, az_i] for i=0,1,2
     ---------------------------------------------------------------------------------------------*/
     double Deltaxyz[9], r[3];

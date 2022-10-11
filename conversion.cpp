@@ -13,14 +13,14 @@ double Halley_method(double x_0, const double &M, const double &ecc, const doubl
     by Halley's method.
     -----------------------------------------------------------------------------------------------
     Arguments:
-        x_0 :   Initial approximation.
-        M   :   Mean anomaly.
-        ecc :   Eccentricity.
-        tol :   Tolerance.
-        NMAX:   Maximum number of iterations.
+    x_0 :   Initial approximation.
+    M   :   Mean anomaly.
+    ecc :   Eccentricity.
+    tol :   Tolerance.
+    NMAX:   Maximum number of iterations.
     -----------------------------------------------------------------------------------------------
     Returns:
-        E   :   Eccentric anomaly.
+    E   :   Eccentric anomaly.
     ---------------------------------------------------------------------------------------------*/
     double E = std::fmod(x_0, 2*M_PI); // Find the floating-point remainder at [0, 2 pi)
     double change = 2*tol; //Difference between E_n+1 and E_n [initial value is 2*tol]
@@ -51,15 +51,15 @@ void op_to_coords(const double &mu, const double &a, const double &ecc, const do
     Note: Check the system of units of Arguments.
     -----------------------------------------------------------------------------------------------
     Arguments:
-        mu  :   G*M, where M = central body's mass.
-        a   :   Semi-major axis.
-        ecc :   Eccentricity [rad].
-        i   :   Inclination [rad].
-        omega:  Argument of the pericenter [rad].
-        Omega:  Longitude of the ascending node [rad].
-        t_0 :   Epoch.
-        t   :   Time.
-        Cartesian_vector: Array that stores Cartesian State Vector.
+    mu  :   G*M, where M = central body's mass.
+    a   :   Semi-major axis.
+    ecc :   Eccentricity [rad].
+    i   :   Inclination [rad].
+    omega:  Argument of the pericenter [rad].
+    Omega:  Longitude of the ascending node [rad].
+    t_0 :   Epoch.
+    t   :   Time.
+    Cartesian_vector: Array that stores Cartesian State Vector.
     -----------------------------------------------------------------------------------------------
     Fills Cartesian_vector with the values of Cartesian State Vector, as follows:
     Cartesian_vector[] = {x, y, z, vx, vy, vz}
@@ -93,14 +93,14 @@ void coords_to_op(const double &mu, const double Cartesian_vector[], double Orbi
     Note: Check the system of units of Arguments.
     -----------------------------------------------------------------------------------------------
     Arguments: 
-        mu      :
-        Cartesian_vector:  Array with the components of the Cartesian State Vector. The format is:
+    mu  :   G*M, where M = central body's mass.
+    Cartesian_vector:  Array with the components of the Cartesian State Vector. The format is:
                             [x, y, z, vx, vy, vz].
-        Orbital_Elements:  Array that stores Orbital Elements. The format is:
+    Orbital_Elements:  Array that stores Orbital Elements. The format is:
                             [a, ecc, i, omega, Omega].        
     -----------------------------------------------------------------------------------------------
     Fills Orbital_Elements with the values of Orbital Elements, as follows:
-        Orbital_Elements[i] = xi, where:
+    Orbital_Elements[i] = xi, where:
         x0 = a:      Semi-major axis.
         x1 = ecc:    Eccentricity [rad].
         x2 = i:      Inclination [rad].
