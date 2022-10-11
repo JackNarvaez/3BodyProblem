@@ -6,7 +6,7 @@ n = 10000		# Iterations in one orbital period of outer body.
 
 all: Main
 
-Main: Main.cpp Integrator.cpp Integrator.h conversion.h conversion.h
+Main: Main.cpp Integrator.cpp Integrator.h conversion.cpp conversion.h
 	g++ -std=c++17 $< Integrator.cpp conversion.cpp -o Evolution.x;\
 	./Evolution.x ${Body2} ${Body3} ${k} ${jump} ${n};\
 
