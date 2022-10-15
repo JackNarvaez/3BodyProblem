@@ -10,8 +10,8 @@ def Plot_PS(w, e, Name='test particle', Color='cyan'):
     Plot phase space: e vs w.
     ----------------------------------------------------------------
     Arguments:
-    e: Eccentricity
     w: The argument of perihelion
+    e: Eccentricity
     Name: Body's name.
     Color: Plot's color. cyan by default.
     ----------------------------------------------------------------
@@ -25,11 +25,12 @@ def Plot_PS(w, e, Name='test particle', Color='cyan'):
 
     #Plot in Cartesian Coordinates
     axs0 = fig.add_subplot(121)
-    axs0.plot(w, e, color=Color)
+    axs0.plot(w, e, '.', mew=0.01, color=Color)
     axs0.set_title('Cartesian Coordinates')
     axs0.set_ylabel('e')
     axs0.set_xlabel('$\omega$ [rads]')
-
+    axs0.set_xlim(0, 6.29)
+    axs0.set_ylim(0,1)
     #Plot in Polar Coordinates
     axs1 = fig.add_subplot(122, projection='polar')
     axs1.plot(w, e, color=Color)

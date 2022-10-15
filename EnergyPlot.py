@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 plt.style.use('dark_background')
 
 from sys import argv
-from numpy import loadtxt, linspace
+from numpy import loadtxt
 
 def Plot_Energy(E, Names='test particle', Color='cyan'):
     '''
