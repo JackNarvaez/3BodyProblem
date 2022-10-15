@@ -104,7 +104,7 @@ int main(int argc, char **argv)
     OPBody3.close();
     auto end{std::chrono::steady_clock::now()};
     std::cout << "Elapsed time in ms: "
-        << std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count()
+        << std::chrono::duration_cast<std::chrono::seconds>(end-start).count()
         << "\n";
     return 0;
 }
