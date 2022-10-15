@@ -10,7 +10,7 @@ Main: Main.cpp Integrator.cpp Integrator.h conversion.cpp conversion.h
 	g++ -std=c++17 $< Integrator.cpp conversion.cpp -o Evolution.x;\
 	./Evolution.x ${Body2} ${Body3} ${k} ${jump} ${n};\
 
-OEs_Evolve: orb_elements.py
+COEs_Evolve: orb_elements.py
 	python3 $< ${Body3}
 
 Phase_Space: Phase_space.py
