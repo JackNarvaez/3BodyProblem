@@ -22,9 +22,9 @@ double Halley_method(double x_0, const double &M, const double &ecc, const doubl
     Returns:
     E   :   Eccentric anomaly.
     ---------------------------------------------------------------------------------------------*/
-    double E = std::fmod(x_0, 2*M_PI); // Find the floating-point remainder at [0, 2 pi)
-    double change = 2*tol; //Difference between E_n+1 and E_n [initial value is 2*tol]
-    int i = 1;  // Iteration counter
+    double E{std::fmod(x_0, 2*M_PI)}; // Find the floating-point remainder at [0, 2 pi)
+    double change{2*tol}; //Difference between E_n+1 and E_n [initial value is 2*tol]
+    int i{1};  // Iteration counter
     while(std::fabs(change) > tol){
         change = 2 * (E - ecc * std::sin(E) - M) * (1. - ecc * std::cos(E))/
                     (2 * pow(1. - ecc * std::cos(E), 2) - (E - ecc * std::sin(E) - M) * ecc * std::sin(E));
@@ -64,16 +64,16 @@ void op_to_coords(const double &mu, const double &a, const double &ecc, const do
     Fills Cartesian_vector with the values of Cartesian State Vector, as follows:
     Cartesian_vector[] = {x, y, z, vx, vy, vz}
     ---------------------------------------------------------------------------------------------*/
-    double n = sqrt(mu/(a*a*a));   // Mean motion
-    double M = n * (t - t_0);   // Mean anomaly
-    double E = Halley_method(0., M, ecc, 10e-10, 100);  // Eccentric anomaly
-    double r = a * (1 - ecc * std::cos(E)); // Distance to the central body
+    double n{sqrt(mu/(a*a*a))};   // Mean motion
+    double M{n * (t - t_0)};   // Mean anomaly
+    double E{Halley_method(0., M, ecc, 10e-10, 100)};  // Eccentric anomaly
+    double r{a * (1 - ecc * std::cos(E))}; // Distance to the central body
     // Position vector in orbital frame
-    double r_XYZ[3] = {a * (std::cos(E) - ecc), a * sqrt(1 - ecc*ecc)*std::sin(E), 0.};
+    double r_XYZ[3]{a * (std::cos(E) - ecc), a * sqrt(1 - ecc*ecc)*std::sin(E), 0.};
     // Velocity vector in the orbital frame
-    double v_XYZ[3] = {-(sqrt(mu*a)/r)*std::sin(E),(sqrt(mu*a*(1-ecc*ecc))/r)*std::cos(E),0.};
+    double v_XYZ[3]{-(sqrt(mu*a)/r)*std::sin(E),(sqrt(mu*a*(1-ecc*ecc))/r)*std::cos(E),0.};
     // Transformation matrix
-    double R[3][3] = {{std::cos(omega)*std::cos(Omega)-std::sin(omega)*std::sin(Omega)*std::cos(i),
+    double R[3][3]{{std::cos(omega)*std::cos(Omega)-std::sin(omega)*std::sin(Omega)*std::cos(i),
                        -std::sin(omega)*std::cos(Omega)-std::cos(omega)*std::sin(Omega)*std::cos(i),
                        std::sin(Omega)*std::sin(i)},
                       {std::cos(omega)*std::sin(Omega)+std::sin(omega)*std::cos(Omega)*std::cos(i),
@@ -108,26 +108,26 @@ void coords_to_op(const double &mu, const double Cartesian_vector[], double Orbi
         x4 = Omega:  Longitude of the ascending node [rad].
     ---------------------------------------------------------------------------------------------*/
     // Position's norm
-    double r = sqrt(Cartesian_vector[0]*Cartesian_vector[0] + Cartesian_vector[1]*Cartesian_vector[1]
-                    + Cartesian_vector[2]*Cartesian_vector[2]);
+    double r{sqrt(Cartesian_vector[0]*Cartesian_vector[0] + Cartesian_vector[1]*Cartesian_vector[1]
+                    + Cartesian_vector[2]*Cartesian_vector[2])};
     // Velocity's norm
-    double v = sqrt(Cartesian_vector[3]*Cartesian_vector[3] + Cartesian_vector[4]*Cartesian_vector[4]
-                    + Cartesian_vector[5]*Cartesian_vector[5]);
+    double v{sqrt(Cartesian_vector[3]*Cartesian_vector[3] + Cartesian_vector[4]*Cartesian_vector[4]
+                    + Cartesian_vector[5]*Cartesian_vector[5])};
     // Radial velocity
-    double v_r = (Cartesian_vector[0]*Cartesian_vector[3]+Cartesian_vector[1]*Cartesian_vector[4]
-                    +Cartesian_vector[2]*Cartesian_vector[5])/r;
+    double v_r{(Cartesian_vector[0]*Cartesian_vector[3]+Cartesian_vector[1]*Cartesian_vector[4]
+                    +Cartesian_vector[2]*Cartesian_vector[5])/r};
     // Angular momentum
-    double h_xyz[3] = {Cartesian_vector[1]*Cartesian_vector[5]-Cartesian_vector[2]*Cartesian_vector[4],
+    double h_xyz[3]{Cartesian_vector[1]*Cartesian_vector[5]-Cartesian_vector[2]*Cartesian_vector[4],
                        Cartesian_vector[2]*Cartesian_vector[3]-Cartesian_vector[0]*Cartesian_vector[5],
                        Cartesian_vector[0]*Cartesian_vector[4]-Cartesian_vector[1]*Cartesian_vector[3]};
     // Norm of the angular momentum
-    double h = sqrt(h_xyz[0]*h_xyz[0] + h_xyz[1]*h_xyz[1] + h_xyz[2]*h_xyz[2]);
+    double h{sqrt(h_xyz[0]*h_xyz[0] + h_xyz[1]*h_xyz[1] + h_xyz[2]*h_xyz[2])};
     // Inclination of the orbit
-    double i = std::acos(h_xyz[2]/h);
+    double i{std::acos(h_xyz[2]/h)};
     // Line of Nodes
-    double N = sqrt(h_xyz[0]*h_xyz[0] + h_xyz[1]*h_xyz[1]);
+    double N{sqrt(h_xyz[0]*h_xyz[0] + h_xyz[1]*h_xyz[1])};
     // Longitude of ascending node
-    double omega,Omega;
+    double omega{0},Omega{0};
     if (h_xyz[0] >= 0){
         Omega = std::acos(-h_xyz[1]/N);
     }
@@ -136,27 +136,22 @@ void coords_to_op(const double &mu, const double Cartesian_vector[], double Orbi
     }
     
     // Eccentricity vector
-    double s1 =(1/mu)*(v*v - mu/r);
-    double s2 = (1/mu)*r*v_r;
-    double ecc_xyz[3] = {s1*Cartesian_vector[0]-s2*Cartesian_vector[3],
+    double s1{(v*v - mu/r)/mu};
+    double s2{r*v_r/mu};
+    double ecc_xyz[3]{s1*Cartesian_vector[0]-s2*Cartesian_vector[3],
                       s1*Cartesian_vector[1]-s2*Cartesian_vector[4],
                       s1*Cartesian_vector[2]-s2*Cartesian_vector[5]};
     // Eccentricity scalar
-    double ecc = sqrt(ecc_xyz[0]*ecc_xyz[0] + ecc_xyz[1]*ecc_xyz[1] + ecc_xyz[2]*ecc_xyz[2]);
+    double ecc{sqrt(ecc_xyz[0]*ecc_xyz[0] + ecc_xyz[1]*ecc_xyz[1] + ecc_xyz[2]*ecc_xyz[2])};
     // Semi-major axis
-    double a = h*h/(mu*(1-ecc*ecc));
+    double a{h*h/(mu*(1-ecc*ecc))};
     
     // Argument of the pericenter
-    double aux =  (-h_xyz[1]*ecc_xyz[0]+h_xyz[0]*ecc_xyz[1])/(N*ecc);
-    if (std::fabs(aux) >1.){
-        omega = 0.;
-    }
-    else{
-        if (ecc_xyz[2] >=0.){
-            omega = std::acos(aux);
-        }
-        else{
-            omega = 2*M_PI - std::acos(aux);
+    double aux{(-h_xyz[1]*ecc_xyz[0]+h_xyz[0]*ecc_xyz[1])/(N*ecc)};
+    if (std::fabs(aux) <1.){
+        omega = std::acos(aux);
+        if (ecc_xyz[2] <0.){
+            omega = 2*M_PI - omega;
         }
     }
     Orbital_Elements[0]=a;

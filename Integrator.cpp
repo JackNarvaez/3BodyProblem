@@ -4,7 +4,7 @@
 #include <cmath>
 #include "Integrator.h"
 
-const double G = 4*pow(M_PI,2); // Universal gravitational constant.
+const double G{4*pow(M_PI,2)}; // Universal gravitational constant.
 
 void Acceleration(const double q0[][3], const double mass[], double a[][3]){
     /*---------------------------------------------------------------------------------------------
@@ -23,7 +23,7 @@ void Acceleration(const double q0[][3], const double mass[], double a[][3]){
     Fills the values of the acceleration vector, as follows:
         a[i] = [ax_i, ay_i, az_i] for i=0,1,2
     ---------------------------------------------------------------------------------------------*/
-    double Deltaxyz[9], r[3];
+    double Deltaxyz[9]{0}, r[3]{0};
     for (int jj = 0; jj < 3; jj++){
         for (int ii = 1; ii < 3; ii++)
             Deltaxyz[ii*3+jj-3]=q0[0][jj]-q0[ii][jj];
@@ -55,7 +55,7 @@ void PEFRL(const double q0[][6], const double mass[], const int &n, const double
     Fills q array with the components of the solution since t0 to tf=ndt.
     ---------------------------------------------------------------------------------------------*/
     // Arrays that store acceleration, position, and velocity, respectively, in intermediate steps.
-    double F[3][3], X[3][3], V[3][3];
+    double F[3][3]{0}, X[3][3]{0}, V[3][3]{0};
     // Initial condition
     for (int ii = 0; ii < 3; ii++){
         for (int jj = 0; jj < 6; jj++){
@@ -63,9 +63,9 @@ void PEFRL(const double q0[][6], const double mass[], const int &n, const double
         }
     }
     // PEFRL Parameters
-    double xi = 0.1786178958448091e+0;
-    double gamma = -0.2123418310626054e+0;
-    double chi = -0.6626458266981849e-1;
+    double xi{0.1786178958448091e+0};
+    double gamma{-0.2123418310626054e+0};
+    double chi{-0.6626458266981849e-1};
     // Main loop
     for (int ll = 0; ll < n-1; ll++){
         for (int ii = 0; ii < 3; ii++){
@@ -134,11 +134,11 @@ double Energy(double q[][6], double mass[]){
     Returns:
     E = Total energy of the system
     ---------------------------------------------------------------------------------------------*/
-    double speed2[3];
+    double speed2[3]{0};
     for (int ii=0; ii<3; ii++){
         speed2[ii] = q[ii][3]*q[ii][3]+q[ii][4]*q[ii][4]+q[ii][5]*q[ii][5];
     }
-    double rel_position[3][3], r[3];
+    double rel_position[3][3]{0}, r[3]{0};
     rel_vec(q[1],q[0],rel_position[0], 3);
     rel_vec(q[2],q[0],rel_position[1], 3);
     rel_vec(q[2],q[1],rel_position[2], 3);
@@ -146,8 +146,8 @@ double Energy(double q[][6], double mass[]){
         r[ii] = sqrt(rel_position[ii][0]*rel_position[ii][0] + rel_position[ii][1]*rel_position[ii][1]
                     +rel_position[ii][2]*rel_position[ii][2]);
     }
-    double U[3] = {mass[0]*mass[1]/r[0], mass[0]*mass[2]/r[1], mass[1]*mass[2]/r[2]};
-    double E=0;
+    double U[3]{mass[0]*mass[1]/r[0], mass[0]*mass[2]/r[1], mass[1]*mass[2]/r[2]};
+    double E{0};
     for (int ii=0; ii < 3; ii++){
         E+=0.5*speed2[ii]*mass[ii]-2*G*U[ii];
     }

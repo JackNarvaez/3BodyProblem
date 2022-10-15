@@ -49,7 +49,7 @@ void read_evol(const std::string &File_address, double q[][3][6], const int bod,
     std::ifstream File;
     File.open (File_address, std::ifstream::in);    // Open file
     std::string line;
-    int i = 1;  //Line counter
+    int i{1};  //Line counter
     std::getline(File,line);
     std::getline(File,line);
 	while (!File.eof() && i<it){
@@ -81,7 +81,7 @@ void read_data(const std::string &File_address, const int &n, std::string &name,
     std::ifstream File;
     File.open (File_address, std::ifstream::in);    // Open file
     std::string line;
-    int i = 1;  //Line counter
+    int i{1};  //Line counter
 	while (!File.eof()){
 	std::getline(File,line);
     // Omit empty lines and comments
@@ -107,25 +107,23 @@ void read_data(const std::string &File_address, const int &n, std::string &name,
 int main(int argc, char **argv)
 {
     std::cout.precision(8);
-    std::string name[3];  // Array of names
-    name[0] = "Sun";  // Name central body.
-    std::string Data = "Data.asc";  // Data file
+    std::string name[3]{"Sun"};  // Array of names
+    std::string Data{"Data.asc"};  // Data file
 
-    int bodies[2] = {atoi(argv[1]), atoi(argv[2])}; // 2nd and 3rd body.
+    int bodies[2]{atoi(argv[1]), atoi(argv[2])}; // 2nd and 3rd body.
 
-    int k = atoi(argv[3]);    // Number of orbital periods of outer body.
-    int jump = atoi(argv[4]); // Stepsize of writing.
-    int n = atoi(argv[5]);  // Iterations in a orbital period of outer body.
-    double mass[3];// Array of masses.
-    mass[0]=1.;
+    int k{atoi(argv[3])};    // Number of orbital periods of outer body.
+    int jump{atoi(argv[4])}; // Stepsize of writing.
+    int n{atoi(argv[5])};  // Iterations in a orbital period of outer body.
+    double mass[3]{1};// Array of masses.
     read_data(Data,bodies[0], name[1], mass[1]);  // Fill data to body 2
     read_data(Data,bodies[1], name[2], mass[2]);  // Fill data to body 
-    double q[n][3][6];      // Array of system's evolution.
+    double q[n][3][6]{0};      // Array of system's evolution.
 
-    std::string Data1 = "./Files/CC_"+name[0]+".txt";  // Data Evolution B1
-    std::string Data2 = "./Files/CC_"+name[1]+".txt";  // Data Evolution B2
-    std::string Data3 = "./Files/CC_"+name[2]+".txt";  // Data Evolution B3
-    double it = k*n/(100*jump);
+    std::string Data1{"./Files/CC_"+name[0]+".txt"};  // Data Evolution B1
+    std::string Data2{"./Files/CC_"+name[1]+".txt"};  // Data Evolution B2
+    std::string Data3{"./Files/CC_"+name[2]+".txt"};  // Data Evolution B3
+    int it{k*n/(100*jump)};
 
     read_evol(Data1,q, 0, it);  // Fill B1 data
     read_evol(Data2,q, 1, it);  // Fill B2 data
@@ -135,7 +133,7 @@ int main(int argc, char **argv)
     header(E, name[2], n, k, jump, "Energy");
 
     for (int jj=0; jj<it; jj++){
-        E << Energy(q[jj], mass) << std::endl;
+        E << Energy(q[jj], mass) << '\n';
     }
     
     E.close();
